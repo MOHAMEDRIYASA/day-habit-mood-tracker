@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Student Habit & Mood Tracker</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Internal CSS (no extra files needed) -->
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #4e54c8, #8f94fb);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        header {
+            text-align: center;
+            padding: 30px 20px;
+            color: #fff;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: auto;
+            padding: 20px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+        }
+
+        .card {
+            background: #fff;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        }
+
+        .card h2 {
+            margin-bottom: 15px;
+        }
+
+        .moods button {
+            margin: 5px;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            background: #4e54c8;
+            color: #fff;
+        }
+
+        .moods button:hover {
+            background: #2c2f9e;
+        }
+
+        .habit {
+            margin-bottom: 10px;
+        }
+
+        .habit input {
+            margin-right: 10px;
+        }
+
+        #summary {
+            list-style: none;
+            margin-top: 10px;
+        }
+
+        #summary li {
+            padding: 5px 0;
+        }
+
+        .reset {
+            margin-top: 15px;
+            padding: 10px;
+            width: 100%;
+            border: none;
+            border-radius: 8px;
+            background: #ff5252;
+            color: #fff;
+            cursor: pointer;
+        }
+
+        .reset:hover {
+            background: #d32f2f;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>📘 Student Habit & Mood Tracker</h1>
+    <p>Build discipline & understand your mood</p>
+</header>
+
+<div class="container">
+
+    <!-- Mood Section -->
+    <section class="card">
+        <h2>How are you feeling today?</h2>
+        <div class="moods">
+            <button onclick="setMood('😊 Happy')">😊 Happy</button>
+            <button onclick="setMood('😐 Neutral')">😐 Neutral</button>
+            <button onclick="setMood('😔 Sad')">😔 Sad</button>
+            <button onclick="setMood('😫 Stressed')">😫 Stressed</button>
+        </div>
+        <p id="currentMood"></p>
+    </section>
+
+    <!-- Habit Section -->
+    <section class="card">
+        <h2>Today's Habits</h2>
+
+        <div class="habit">
+            <label>
+                <input type="checkbox" onchange="toggleHabit('Study')"> 📖 Study
+            </label>
+        </div>
+
+        <div class="habit">
+            <label>
+                <input type="checkbox" onchange="toggleHabit('Exercise')"> 🏃 Exercise
+            </label>
+        </div>
+
+        <div class="habit">
+            <label>
+                <input type="checkbox" onchange="toggleHabit('Reading')"> 📚 Reading
+            </label>
+        </div>
+
+        <div class="habit">
+            <label>
+                <input type="checkbox" onchange="toggleHabit('Meditation')"> 🧘 Meditation
+            </label>
+        </div>
+    </section>
+
+    <!-- Summary Section -->
+    <section class="card">
+        <h2>Daily Summary</h2>
+        <ul id="summary"></ul>
+        <button class="reset" onclick="resetDay()">Reset Day</button>
+    </section>
+
+</div>
+
+<!-- Internal JavaScript -->
+<script>
+    let habits = JSON.parse(localStorage.getItem("habits")) || {};
+    let mood = localStorage.getItem("mood") || "";
+
+    updateUI();
+
+    function setMood(selectedMood) {
+        mood = selectedMood;
+        localStorage.setItem("mood", mood);
+        updateUI();
+    }
+
+    function toggleHabit(habitName) {
+        habits[habitName] = !habits[habitName];
+        localStorage.setItem("habits", JSON.stringify(habits));
+        updateUI();
+    }
+
+    function updateUI() {
+        document.getElementById("currentMood").innerText =
+            mood ? "Today's Mood: " + mood : "";
+
+        const summary = document.getElementById("summary");
+        summary.innerHTML = "";
+
+        for (let habit in habits) {
+            const li = document.createElement("li");
+            li.innerText = `${habits[habit] ? "✅" : "❌"} ${habit}`;
+            summary.appendChild(li);
+        }
+    }
+
+    function resetDay() {
+        if (confirm("Reset today's data?")) {
+            localStorage.clear();
+            habits = {};
+            mood = "";
+            updateUI();
+        }
+    }
+</script>
+
+</body>
+</html>
