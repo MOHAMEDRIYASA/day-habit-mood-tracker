@@ -1,0 +1,24 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+body {
+    background: linear-gradient(135deg, #4e54c8, #8f94fb);
+    min-height: 100vh;
+    color: #333;
+}
+
+/* Header */
+header {
+    text-align: center;
+    padding: 30px 20px;
+    color: #ffffff;
+}
+
+header h1 {
+    font-size: 2rem;
+    margin-bottom: 8px;
+}
